@@ -1,14 +1,25 @@
 package iskido.secretsanta;
 
+import java.util.ArrayList;
+
 public class TopHat {
 
     private Person person;
+    private final ArrayList<Person> people;
 
-    public void add(Person person) {
-        this.person = person;
+    public TopHat() {
+        people = new ArrayList<Person>();
     }
 
-    public Pairing drawPair() {
-        return new Pairing(person, person);
+    public void add(Person person) {
+        people.add(person);
+    }
+
+    public Person draw() {
+        if (people.isEmpty()) {
+            throw new EmptyTopHatException();
+        } else {
+            return people.remove(0);
+        }
     }
 }

@@ -1,7 +1,11 @@
 package iskido.secretsanta;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -17,13 +21,45 @@ public class TopHatTest {
     }
 
     @Test
-    public void aPersonAddedToSecretSantaIsAssigned() throws Exception {
-        Person person = mock(Person.class);
-        Pairing expectedPairing = new Pairing(person, person);
-        topHat.add(person);
+    public void drawSomeoneFromTheHatWhoHasBeenAdded() throws Exception {
+        Person addedPerson = mock(Person.class);
+        topHat.add(addedPerson);
 
-        Pairing actualPairing = topHat.drawPair();
+        Person drawnPerson = topHat.draw();
 
-        assertThat(actualPairing, is(expectedPairing));
+        assertThat(drawnPerson, is(addedPerson));
     }
+
+    @Test
+    public void throwsAnExceptionWhenRequestedToDrawFromAnEmptyHat() throws Exception {
+        try {
+            topHat.draw();
+
+            Assert.fail(String.format("Expected [%s]", EmptyTopHatException.class.getSimpleName()));
+        } catch (EmptyTopHatException success) {
+        }
+    }
+
+    @Test
+    public void drawPeopleFromTheHatWhoHaveBeenAdded() throws Exception {
+        Person someoneAdded = mock(Person.class);
+        Person someoneElseAdded = mock(Person.class);
+        Set<Person> peopleAdded = new HashSet<Person>();
+        peopleAdded.add(someoneAdded);
+        peopleAdded.add(someoneElseAdded);
+
+        topHat.add(someoneAdded);
+        topHat.add(someoneElseAdded);
+
+        Person someoneDrawn = topHat.draw();
+        Person someoneElseDrawn = topHat.draw();
+
+        Set<Person> peopleDrawn = new HashSet<Person>();
+        peopleDrawn.add(someoneDrawn);
+        peopleDrawn.add(someoneElseDrawn);
+
+        assertThat(peopleDrawn, is(peopleAdded));
+    }
+
+    // Test cannot add same person twice
 }
