@@ -9,6 +9,7 @@ import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.mockito.Mockito.mock;
 
 public class TopHatTest {
@@ -61,5 +62,17 @@ public class TopHatTest {
         assertThat(peopleDrawn, is(peopleAdded));
     }
 
-    // Test cannot add same person twice
+    @Test
+    public void throwsAnExceptionWhenAddingTheSamePersonMoreThanOnce() throws Exception {
+        Person person = new Person("Bob");
+        topHat.add(person);
+
+        try {
+            topHat.add(person);
+
+            Assert.fail(String.format("Expected [%s]", IllegalArgumentException.class.getSimpleName()));
+        } catch (IllegalArgumentException expected) {
+            assertThat(expected.getMessage(), containsString(person.name()));
+        }
+    }
 }

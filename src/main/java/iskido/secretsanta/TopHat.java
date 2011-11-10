@@ -12,6 +12,9 @@ public class TopHat {
     }
 
     public void add(Person person) {
+        if (people.contains(person)) {
+            throw new IllegalArgumentException(String.format("[%s] is already in the %s", person.name(), this.getClass().getSimpleName()));
+        }
         people.add(person);
     }
 
