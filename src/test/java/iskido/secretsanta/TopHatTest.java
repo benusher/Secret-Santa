@@ -64,7 +64,7 @@ public class TopHatTest {
 
     @Test
     public void throwsAnExceptionWhenAddingTheSamePersonMoreThanOnce() throws Exception {
-        Person person = new Person("Bob");
+        Person person = SecretSantaDataFixtures.anyPerson();
         topHat.add(person);
 
         try {

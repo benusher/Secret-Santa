@@ -7,17 +7,21 @@ version = '1.0-SNAPSHOT'
 
 uploadArchives {
     repositories {
-       flatDir(dirs: file('repos'))
+        flatDir(dirs: file('repos'))
     }
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url "file:///Users/ben/Dev/local-repo"
+    }
 }
 
 dependencies {
+    compile group: 'com.iskido', name: 'porpoise', version: '1.0-SNAPSHOT'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.8.5'
-    testCompile group: 'junit', name: 'junit-dep', version: '4.8.2'
+    testCompile group: 'junit', name: 'junit-dep', version: '4.10'
     testCompile group: 'org.hamcrest', name: 'hamcrest-core', version: '1.1'
 }
