@@ -1,15 +1,17 @@
 package iskido.secretsanta;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.iskido.porpoise.Presentation.unCamel;
 
 public class TopHat {
 
-    private Person person;
-    private final ArrayList<Person> people;
+    private final List<Person> people;
+    private final Randomatic randomatic;
 
-    public TopHat() {
+    public TopHat(Randomatic randomatic) {
+        this.randomatic = randomatic;
         people = new ArrayList<Person>();
     }
 
@@ -25,7 +27,7 @@ public class TopHat {
         if (people.isEmpty()) {
             throw new EmptyTopHatException();
         } else {
-            return people.remove(0);
+            return people.remove(randomatic.nextInt(people.size()));
         }
     }
 }

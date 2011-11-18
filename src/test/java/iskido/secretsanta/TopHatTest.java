@@ -7,18 +7,23 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
+import static iskido.secretsanta.SecretSantaDataFixtures.anyPerson;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
+import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class TopHatTest {
 
     private TopHat topHat;
+    private Randomatic randomatic;
 
     @Before
     public void setUp() throws Exception {
-        topHat = new TopHat();
+        randomatic = mock(Randomatic.class);
+        topHat = new TopHat(randomatic);
     }
 
     @Test
@@ -64,7 +69,7 @@ public class TopHatTest {
 
     @Test
     public void throwsAnExceptionWhenAddingTheSamePersonMoreThanOnce() throws Exception {
-        Person person = SecretSantaDataFixtures.anyPerson();
+        Person person = anyPerson();
         topHat.add(person);
 
         try {
@@ -74,5 +79,22 @@ public class TopHatTest {
         } catch (IllegalArgumentException expected) {
             assertThat(expected.getMessage(), containsString(person.name()));
         }
+    }
+
+    @Test
+    public void peopleAreDrawnFromTheTopHatInARandomOrder() throws Exception {
+        Person firstPersonAdded = anyPerson();
+        Person secondPersonAdded = anyPerson();
+        Person thirdPersonAdded = anyPerson();
+
+        topHat.add(firstPersonAdded);
+        topHat.add(secondPersonAdded);
+        topHat.add(thirdPersonAdded);
+
+        when(randomatic.nextInt(anyInt())).thenReturn(2).thenReturn(0).thenReturn(0);
+
+        assertThat(topHat.draw(), is(thirdPersonAdded));
+        assertThat(topHat.draw(), is(firstPersonAdded));
+        assertThat(topHat.draw(), is(secondPersonAdded));
     }
 }
